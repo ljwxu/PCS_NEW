@@ -1,0 +1,586 @@
+﻿<Window x:Class="PCS_NEW.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PCS_NEW"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="1080" Width="1920" WindowState="Maximized" Closing="Window_Closing" Background="Transparent">
+
+    <Window.Resources>
+        <Style  TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontStretch" Value="Normal"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal"  Background="LightBlue">
+            <Button Content=" 连接" Command="{Binding ConnectCommand}"/>
+            <Button Content=" 开始采集" Command="{Binding StartDaqCommand}"/>
+        </StackPanel>
+
+        <TabControl Grid.Row="1" FontSize="25">
+            <TabItem Header="主界面" Name="PCSMonitorView" >
+                <Grid>
+                    <Grid.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/PCS_NEW;component/Resource/Image/SetGroupBox.png" Stretch="UniformToFill"/>
+                    </Grid.Background>
+                    <Grid.RowDefinitions>
+                        <RowDefinition  Height="*"/>
+                        <RowDefinition  Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!--  DC侧支路1概览  -->
+                    <Grid Grid.Row="0">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="pack://application:,,,/PCS_NEW;component/Resource/Image/ListBorder.png" />
+                        </Grid.Background>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition  Width="auto"/>
+                            <ColumnDefinition  Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center"  Foreground="White" Text="故障显示" Grid.Column="0" Margin="20 20 0 0">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect Direction="0" ShadowDepth="0" Color="#7EFFFF" />
+                                </TextBlock.Effect>
+                            </TextBlock>
+
+                            <Border Grid.Column="1" Grid.Row="1"  CornerRadius="10" Background="{Binding AlarmColorDC}" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding VisDCAlarm}">
+                                <TextBlock Text="DC模块故障" TextAlignment="Center"  >
+                                    <TextBlock.ToolTip>
+                                        <ToolTip Height="auto" Width="auto" Background="White" >
+                                            <StackPanel>
+                                                <ListBox ItemsSource="{Binding AlarmStateDC}">
+                                                    <ListBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding }" />
+                                                        </DataTemplate>
+                                                    </ListBox.ItemTemplate>
+                                                </ListBox>
+                                            </StackPanel>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                            </Border>
+
+                            <Border Grid.Column="1" Grid.Row="2"  CornerRadius="10" Background="{Binding AlarmColorPDS}" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="{Binding VisPDSAlarm}">
+                                <TextBlock Text="PDS故障" HorizontalAlignment="Center" >
+                                    <TextBlock.ToolTip>
+                                        <ToolTip Height="auto" Width="auto" Background="White">
+                                            <StackPanel>
+                                                <ListBox ItemsSource="{Binding AlarmStatePDS}">
+                                                    <ListBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding}" />
+                                                        </DataTemplate>
+                                                    </ListBox.ItemTemplate>
+                                                </ListBox>
+                                            </StackPanel>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                            </Border>
+                        </Grid>
+
+                        <Grid Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Margin="30,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"  Foreground="White" Text="DC侧支路1概览">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect Direction="0" ShadowDepth="0" Color="#7EFFFF" />
+                                </TextBlock.Effect>
+                            </TextBlock>
+
+
+
+                            <TextBlock   Text="DC侧支路1：" Grid.Row="1"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50 20 0 0"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1State1}" Grid.Row="1" Grid.Column="1" Margin="0 20 0 0"/>
+                            <TextBlock   Text="DC侧支路1启停状态：" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 20 0 0"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1State2}" Grid.Row="1" Grid.Column="5" Margin="0 20 0 0"/>
+
+
+
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50 20 0 0" Foreground="White" Text="直流功率："  Grid.Row="2"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1DCPower}" Grid.Row="2" Grid.Column="1" Margin="0 20 0 0"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="kW"  Grid.Row="2" Grid.Column="2" Margin="0 20 0 0"/>
+
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="White" Text="直流电压："   Grid.Row="2" Grid.Column="3" Margin="0 20 0 0"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1DCVol}" Grid.Row="2" Grid.Column="4" Margin="0 20 0 0"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="V"  Grid.Row="2" Grid.Column="5" Margin="0 20 0 0"/>
+
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" Text="直流电流："  Grid.Row="3" Grid.Column="0" Margin="50 20 0 0"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1DCCur}" Grid.Row="3" Grid.Column="1" Margin="0 20 0 0"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="A"  Grid.Row="3" Grid.Column="2" Margin="0 20 0 0"/>
+
+
+
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50 20 0 0" Foreground="White" Text="累计充电电量：" Grid.Row="4" Grid.Column="0"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1Char}" Grid.Row="4" Grid.Column="1" Margin="0 20 0 0"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="kWh" Grid.Row="4" Grid.Column="2" Margin="0 20 0 0"/>
+
+
+
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="50 20 0 20" Foreground="White" Text="累计放电电量：" Grid.Row="5" Grid.Column="0"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1DisChar}" Grid.Row="5" Grid.Column="1" Margin="0 20 0 20"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="kWh" Grid.Row="5" Grid.Column="2" Margin="0 20 0 20"/>
+
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="White" Text="BUS侧电压：" Grid.Row="5" Grid.Column="3" Margin="0 20 0 20"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="{Binding DcBranch1BUSVol}" Grid.Row="5" Grid.Column="4" Margin="0 20 0 20"/>
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" Text="V" Grid.Row="5" Grid.Column="5" Margin="0 20 0 20"/>
+                        </Grid>
+                    </Grid>
+
+                    <!--  总体概览  -->
+                    <Grid Grid.Row="1">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="pack://application:,,,/PCS_NEW;component/Resource/Image/ListBorder.png" />
+                        </Grid.Background>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Margin="30,20,0,0" HorizontalAlignment="left" VerticalAlignment="Center"  Foreground="White" Text="总体概览">
+                            <TextBlock.Effect>
+                                <DropShadowEffect Direction="0" ShadowDepth="0" Color="#7EFFFF" />
+                            </TextBlock.Effect>
+                        </TextBlock>
+
+                        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="40 0 0 0">
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="基本信息：" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="60 0 0 0">
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="模块温度：" />
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="{Binding ModuleTemperature}" Width="60"/>
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="℃" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" >
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="环境温度：" />
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="{Binding AmbientTemperature}" Width="60" />
+                            <TextBlock Width="50" VerticalAlignment="Center" Foreground="White" Text="℃" />
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Margin="40 0 0 0">
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="控制状态：" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" Margin="60 0 0 0">
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="本地手动控制" />
+                            <Ellipse Height="30" Width="30" Fill="{Binding PCSStateColorManControl}" Margin="10 0 0 0">
+                            </Ellipse>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="本地自动控制" />
+                            <Ellipse Height="30" Width="30" Fill="{Binding PCSStateColorAutoControl}" Margin="10 0 0 0">
+                            </Ellipse>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="远程控制状态" />
+                            <Ellipse Height="30" Width="30" Fill="{Binding PCSStateColorRemoteControl}" Margin="10 0 0 0">
+                            </Ellipse>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" Margin="40 0 0 0">
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="PDS状态：" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="6" Grid.Column="0" Orientation="Horizontal" Margin="60 0 0 20">
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="告警状态" />
+                            <Ellipse Height="30" Width="30" Fill="{Binding AlarmStateColorPCS}" Margin="10 0 0 0">
+                            </Ellipse>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" Margin=" 0 0 0 20">
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="故障状态" />
+                            <Ellipse Height="30" Width="30" Fill="{Binding FaultStateColorPCS}" Margin="10 0 0 0">
+                            </Ellipse>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="6" Grid.Column="2" Orientation="Horizontal" Margin="0 0 0 20">
+                            <TextBlock VerticalAlignment="Center" Foreground="White" Text="上电初始化状态"/>
+                            <Ellipse Height="30" Width="30" Fill="{Binding PowerOnInitStateColorPCS}" Margin="10 0 0 0">
+                            </Ellipse>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="DC模块状态" Name="DCStatusView">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+
+                    </Grid.ColumnDefinitions>
+                    <Grid.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/PCS_NEW;component/Resource/Image/ListBorder.png"/>
+                    </Grid.Background>
+
+                    <TextBlock Text="序号"  FontFamily="song" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 20 0 0"/>
+                    <TextBlock Text="名称"  FontFamily="song" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1" Margin="0 20 0 0"/>
+                    <TextBlock Text="运行状态"  FontFamily="song" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2" Margin="0 20 0 0"/>
+
+                    <TextBlock Text="1"  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 10 0 0"/>
+                    <TextBlock Text="2"  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 10 0 0"/>
+                    <TextBlock Text="3"  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 10 0 0"/>
+                    <TextBlock Text="4"  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 10 0 0"/>
+                    <TextBlock Text="5"  Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 10 0 0"/>
+                    <TextBlock Text="6"  Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 10 0 0"/>
+                    <TextBlock Text="7"  Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 10 0 0"/>
+                    <TextBlock Text="8"  Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 10 0 0"/>
+                    <TextBlock Text="9"  Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 10 0 0"/>
+                    <TextBlock Text="10"  Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 10 0 20"/>
+
+                    <TextBlock Text="DC模块组：模块1"  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" Margin="0 10 0 0"/>
+                    <TextBlock Text="DC模块组：模块2"  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" Margin="0 10 0 0"/>
+                    <TextBlock Text="DC模块组：模块3"  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" Margin="0 10 0 0"/>
+                    <TextBlock Text="DC模块组：模块4"  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" Margin="0 10 0 0"/>
+                    <TextBlock Text="DC模块组：模块5"  Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" Margin="0 10 0 0"/>
+                    <TextBlock Text="DC模块组：模块6"  Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" Margin="0 10 0 0"/>
+                    <TextBlock Text="DC模块组：模块7"  Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" Margin="0 10 0 0"/>
+                    <TextBlock Text="DC模块组：模块8"  Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" Margin="0 10 0 0"/>
+                    <TextBlock Text="DC模块组：模块9"  Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" Margin="0 10 0 0"/>
+                    <TextBlock Text="DC模块组：模块10"  Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="1" Margin="0 10 0 20"/>
+
+                    <TextBlock Text="{Binding Module1Status1}"  Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor1}" Margin="0 10 0 0"/>
+                    <TextBlock Text="{Binding Module1Status2}"  Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor2}" Margin="0 10 0 0"/>
+                    <TextBlock Text="{Binding Module1Status3}"  Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor3}" Margin="0 10 0 0"/>
+                    <TextBlock Text="{Binding Module1Status4}"  Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor4}" Margin="0 10 0 0"/>
+                    <TextBlock Text="{Binding Module1Status5}"  Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor5}" Margin="0 10 0 0"/>
+                    <TextBlock Text="{Binding Module1Status6}"  Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor6}" Margin="0 10 0 0"/>
+                    <TextBlock Text="{Binding Module1Status7}"  Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor7}" Margin="0 10 0 0"/>
+                    <TextBlock Text="{Binding Module1Status8}"  Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor8}" Margin="0 10 0 0"/>
+                    <TextBlock Text="{Binding Module1Status9}"  Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor9}" Margin="0 10 0 0"/>
+                    <TextBlock Text="{Binding Module1Status10}"  Grid.Row="10" VerticalAlignment="Center" HorizontalAlignment="Center"  Grid.Column="2" Foreground="{Binding Module1StatusColor10}" Margin="0 10 0 20"/>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="参数设置" Name="PCSSettingView">
+                <Border Background="Black">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0"  Margin="10 10 10 0">
+                            <Grid.Background>
+                                <ImageBrush ImageSource="pack://application:,,,/PCS_NEW;component/Resource/Image/SetGroupBox.png"/>
+                            </Grid.Background>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0">
+                                <TextBlock Text="BUS侧电压设置：" FontSize="30" Margin="50 20 0 0"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="上限电压:"  VerticalAlignment="Center" Grid.Column="0" Margin="70 0 0 0 "/>
+                                <TextBox   Text="{Binding BUSUpperLimitVolThresh}" VerticalContentAlignment="Center" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="1" Margin="0 0 0 20"/>
+                                <TextBlock Text="V"  VerticalAlignment="Center" Grid.Column="2"/>
+
+                                <TextBlock Text="下限电压:"  VerticalAlignment="Center" Margin="20,0,0,0" Grid.Column="3"/>
+                                <TextBox  Text="{Binding BUSLowerLimitVolThresh}" VerticalContentAlignment="Center" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="4" Margin="0 0 0 20"/>
+                                <TextBlock Text="V"  VerticalAlignment="Center" Grid.Column="5"/>
+
+                                <TextBlock Text="高压设置:"  VerticalAlignment="Center" Margin="20,0,0,0" Grid.Column="6"/>
+                                <TextBox  Text="{Binding BUSHVolSetting}" VerticalContentAlignment="Center" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="7" Margin="0 0 0 20"/>
+                                <TextBlock Text="V"  VerticalAlignment="Center" Grid.Column="8"/>
+
+                                <TextBlock Text="低压设置:"  VerticalAlignment="Center" Margin="20,0,0,0" Grid.Column="9"/>
+                                <TextBox  Text="{Binding BUSLVolSetting}" VerticalContentAlignment="Center" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="10" Margin="0 0 0 20"/>
+                                <TextBlock Text="V"  VerticalAlignment="Center" Grid.Column="11"/>
+
+                                <Button Content="读取信息"  Style="{StaticResource LineButton}"  Background="#3a617e" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,5,0,5" Command="{Binding ReadBUSVolInfoCommand}" Grid.Column="12"></Button>
+                                <Button Content="同步信息"  Style="{StaticResource LineButton}"  Background="#3a617e" HorizontalAlignment="Center" Margin="40,5,0,5" Command="{Binding SyncBUSVolInfoCommand}" Grid.Column="13"></Button>
+                            </Grid>
+                        </Grid>
+
+                        <Grid Grid.Row="3"  Margin="10 10 10 0">
+                            <Grid.Background>
+                                <ImageBrush ImageSource="pack://application:,,,/PCS_NEW;component/Resource/Image/SetGroupBox.png"/>
+                            </Grid.Background>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="DC侧支路设置：" Margin="40 50 0 40" Grid.Row="0"/>
+                            <TextBlock Text="支路1：" VerticalAlignment="Center"  FontSize="30" FontWeight="Bold" Grid.Row="1" Margin="50 0 0 10"/>
+                            <!--<ComboBox Width="100" HorizontalAlignment="Left" SelectedValue="{Binding DCBranch}" SelectedValuePath="Content" FontSize="20" Height="30">
+                                        <ComboBoxItem Content="1"/>
+                                        <ComboBoxItem Content="2"/>
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="4"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="6"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="8"/>
+                                    </ComboBox>-->
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="电池下限电压："  VerticalAlignment="Center" Grid.Column="0" Margin="60 0 0 10"/>
+                                <TextBox  Text="{Binding BTLLimitVol}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="1" Margin="0 0 0 20"/>
+                                <TextBlock Text="V" VerticalAlignment="Center" Grid.Column="2" Margin="0 0 0 10"/>
+                                <TextBlock Text="放电终止电压："  VerticalAlignment="Center" Margin="20,0,0,10" Grid.Column="3" />
+                                <TextBox  Text="{Binding DischargeSTVol}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="4" Margin="0 0 0 20"/>
+                                <TextBlock Text="V" VerticalAlignment="Center" Grid.Column="5" Margin="0 0 0 10"/>
+                                <TextBlock Text="多支路电流调节参数："  VerticalAlignment="Center" Margin="20,0,0,10" Grid.Column="6" />
+                                <TextBox  Text="{Binding MultiBranchCurRegPar}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="7" Margin="0 0 0 20"/>
+                                
+                            </Grid>
+
+                            <Grid Grid.Row="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="175*"/>
+                                    <ColumnDefinition Width="157*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="电池均充电压："  VerticalAlignment="Center" Grid.Column="0" Margin="60 0 0 10"/>
+                                <TextBox  Text="{Binding BatAveChVol}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="1" Margin="0 0 0 20"/>
+                                <TextBlock Text="V" VerticalAlignment="Center" Grid.Column="2"  />
+                                <TextBlock Text="充电截止电流："  VerticalAlignment="Center"  Grid.Column="3" Margin="20 0 0 0"/>
+                                <TextBox  Text="{Binding ChCutCurrent}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="4"  Margin="0 0 0 20"/>
+                                <TextBlock Text="A" VerticalAlignment="Center" Grid.Column="5"/>
+                                <TextBlock Text="最大充电电流："  VerticalAlignment="Center" Margin="20,0,0,0" Grid.Column="6"/>
+                                <TextBox  Text="{Binding MaxChCurrent}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="7"  Margin="0 0 0 20"/>
+                                <TextBlock Text="A" VerticalAlignment="Center" Grid.Column="8"  />
+                                <TextBlock Text="最大放电电流："  VerticalAlignment="Center" Margin="10,0,0,0" Grid.Column="9"/>
+                                <TextBox  Text="{Binding MaxDisChCurrent}" Style="{StaticResource UnderlineTextBoxStyle}" Grid.Column="10"  Margin="0 0 0 20"/>
+                                <TextBlock Text="A" VerticalAlignment="Center" Grid.Column="11"/>
+
+                                
+                            </Grid>
+
+                            <Grid Grid.Row="4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Button Content="读取信息"   Style="{StaticResource LineButton}" Margin="1000,0,0,10" Background="#3a617e" HorizontalAlignment="Center"  Command="{Binding ReadDCBranchInfoCommand}" Grid.Column="0" ></Button>
+                                <Button Content="同步信息"   Style="{StaticResource LineButton}" Margin="10,0,0,10" Background="#3a617e" HorizontalAlignment="Left"  Command="{Binding SyncDCBranchInfoCommand}" Grid.Column="1" ></Button>
+                            </Grid> 
+                            <TextBlock Text="手动控制充放电：" VerticalAlignment="Center"  FontSize="30"  Margin="50 0 0 10" Grid.Row="5"/>
+
+                            <Grid Grid.Row="6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="直流控制模式：" VerticalAlignment="Center" Grid.Column="0" Margin="60 0 0 20"/>
+                                <ComboBox SelectedValuePath="Content" Width="150" SelectedValue="{Binding ModeSet1}" Height="30" FontSize="20" Grid.Column="1" Margin="0 0 0 20">
+                                    <ComboBoxItem Content="设置电流调节"/>
+                                    <ComboBoxItem Content="设置功率调节"/>
+                                </ComboBox>
+
+                                <Button Content="模式设置"   Style="{StaticResource LineButton}" Margin="10 0 0 20" Background="#3a617e" HorizontalAlignment="Center"   Command="{Binding ModeSetCommand}" Grid.Column="2"/>
+
+
+                                <TextBlock Text="直流电流："  VerticalAlignment="Center" Margin="10,0,0,20"  Visibility="{Binding VisDCCur}" Grid.Column="3"/>
+                                <TextBox  Text="{Binding DCCurrentSet}" Style="{StaticResource UnderlineTextBoxStyle}" Visibility="{Binding VisDCCur}" Grid.Column="4" Margin="0 0 0 40"/>
+                                <TextBlock Text="A"  VerticalAlignment="Center"  Visibility="{Binding VisDCCur}" Grid.Column="5" Margin="0 0 0 20"/>
+
+
+                                <TextBlock Text="直流功率："  VerticalAlignment="Center"  Visibility="{Binding VisDCPower}" Grid.Column="3" Margin="10,0,0,20"/>
+                                <TextBox  Text="{Binding DCPowerSet}" Style="{StaticResource UnderlineTextBoxStyle}" Visibility="{Binding VisDCPower}" Grid.Column="4" Margin="0 0 0 40"/>
+                                <TextBlock Text="kW" VerticalAlignment="Center"  Visibility="{Binding VisDCPower}"  Grid.Column="5" Margin="0 0 0 20"/>
+
+                                <Button Content="充放电"   Style="{StaticResource LineButton}"   Margin="10,0,0,20" Background="#3a617e" HorizontalAlignment="Center"  Command="{Binding ManCharCommand}" Visibility="{Binding VisDCChar}" Grid.Column="6"></Button>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </TabItem>
+            <TabItem Header="故障日志" Name="FaultView">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="序号" FontSize="20"  Background="Black" TextAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Text="故障" FontSize="20"  Background="Black" TextAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Text="时间" FontSize="20"  Background="Black" TextAlignment="Center"/>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <ListView Grid.Column="0" HorizontalAlignment="Center">
+                            <ListViewItem>1</ListViewItem>
+                            <ListViewItem>2</ListViewItem>
+                            <ListViewItem>3</ListViewItem>
+                            <ListViewItem>4</ListViewItem>
+                            <ListViewItem>5</ListViewItem>
+                            <ListViewItem>6</ListViewItem>
+                            <ListViewItem>7</ListViewItem>
+                            <ListViewItem>8</ListViewItem>
+                            <ListViewItem>9</ListViewItem>
+                            <ListViewItem>10</ListViewItem>
+                        </ListView>
+                        <ListView Grid.Column="1" HorizontalAlignment="Center" Name="FaultShow" ItemsSource="{Binding FaultShow}">
+                            <ListViewItem>A ListView</ListViewItem>
+                            <ListViewItem>A ListView</ListViewItem>
+                            <ListViewItem>A ListView</ListViewItem>
+                            <ListViewItem>A ListView</ListViewItem>
+                        </ListView>
+                        <ListView Grid.Column="2" HorizontalAlignment="Center">
+                            <ListViewItem>A ListView</ListViewItem>
+                            <ListViewItem>A ListView</ListViewItem>
+                            <ListViewItem>A ListView</ListViewItem>
+                            <ListViewItem>A ListView</ListViewItem>
+                        </ListView>
+                    </Grid>
+                    
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

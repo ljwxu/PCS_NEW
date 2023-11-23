@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="PCS_NEW.MyControl.IPInput"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PCS_NEW.MyControl"
+             mc:Ignorable="d"
+             d:DesignHeight="20" d:DesignWidth="140">
+    <Border BorderThickness="1" BorderBrush="#FF939393">
+        <Grid Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBox Name="P1" Grid.Column="0" BorderThickness="0" VerticalAlignment="Center" TextChanged="P1_TextChanged" PreviewTextInput="P1_TextInput" PreviewKeyDown="P1_KeyDown"></TextBox>
+            <TextBlock Grid.Column="1" Text="." VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <TextBox Name="P2" Grid.Column="2" BorderThickness="0" VerticalAlignment="Center" TextChanged="P2_TextChanged" PreviewTextInput="P1_TextInput" PreviewKeyDown="P2_KeyDown"></TextBox>
+            <TextBlock Grid.Column="3" Text="." VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <TextBox Name="P3" Grid.Column="4" BorderThickness="0" VerticalAlignment="Center" TextChanged="P3_TextChanged" PreviewTextInput="P1_TextInput" PreviewKeyDown="P3_KeyDown"></TextBox>
+            <TextBlock Grid.Column="5" Text="." VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+            <TextBox Name="P4" Grid.Column="6" BorderThickness="0" VerticalAlignment="Center" PreviewTextInput="P4_TextInput" PreviewKeyDown="P4_KeyDown" ></TextBox>
+        </Grid>
+    </Border>
+</UserControl>
